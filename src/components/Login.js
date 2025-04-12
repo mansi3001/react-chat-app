@@ -28,6 +28,106 @@ export default function Login() {
     setLoading(false);
   }
 
+  //   function convertDateFormat(isoDateString) {
+  //     // Parse the ISO date string
+  //     const date = new Date(isoDateString);
+
+  //     // Convert to the specified format
+  //     return date.toString();
+  //   }
+  //   const isoDate = "2025-04-12T10:27:14+0000";
+  //   const formattedDate = convertDateFormat(isoDate);
+  //   console.log({ formattedDate });
+
+  /* (() => {
+    // Parse the ISO date string
+    const date = new Date("2025-04-12T10:27:14+0000");
+
+    // Convert to the specified format
+    console.log(date.toString());
+    return date.toString();
+  })() */
+
+  // TIME AGO LOGIC
+  (() => {
+    let timestamp = "2025-04-11T17:39:41+0000";
+    if (!timestamp) return "";
+
+    const messageDate = new Date(timestamp);
+    const now = new Date();
+
+    // Calculate time difference in seconds
+    const diffInSeconds = Math.floor((now - messageDate) / 1000);
+    console.table({ timestamp, messageDate, now, diffInSeconds });
+
+    console.log("diffInSeconds < 60", diffInSeconds < 60);
+    console.log("diffInSeconds < 3600", diffInSeconds < 3600);
+    console.log("diffInSeconds < 86400", diffInSeconds < 86400);
+    console.log("diffInSeconds < 604800", diffInSeconds < 604800);
+    // Just now: less than 1 minute ago
+    if (diffInSeconds < 60) {
+      const response = "just now";
+      console.log(response);
+      return response;
+    }
+
+    // Minutes ago: less than 1 hour ago
+    if (diffInSeconds < 3600) {
+      const minutes = Math.floor(diffInSeconds / 60);
+      console.log("minutes", minutes);
+      const response = `${minutes} ${minutes === 1 ? "minute" : "minutes"} ago`;
+      console.log(response);
+      return response;
+    }
+
+    // Hours ago: less than 24 hours ago
+    if (diffInSeconds < 86400) {
+      const hours = Math.floor(diffInSeconds / 3600);
+      console.log("hours", hours);
+      const response = `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
+      console.log(response);
+      return response;
+    }
+
+    // Yesterday
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    if (messageDate.toDateString() === yesterday.toDateString()) {
+      const response = `Yesterday at ${messageDate.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      })}`;
+      console.log(response);
+      return response;
+    }
+
+    // Within the last week: show day of week
+    if (diffInSeconds < 604800) {
+      const response =
+        messageDate.toLocaleDateString([], { weekday: "long" }) +
+        ` at ${messageDate.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}`;
+      console.log(response);
+      return response;
+    }
+
+    // Older than a week: show full date
+    const response =
+      messageDate.toLocaleDateString([], {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      }) +
+      ` at ${messageDate.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      })}`;
+    console.log(response);
+    return response;
+  })();
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-md">
